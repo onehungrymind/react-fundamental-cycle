@@ -1,7 +1,6 @@
 /* 19 remote-detail-fetch: Fetch detail on selection (simulate with filter or route param). */
 import React from 'react';
 
-import React from 'react';
 export default function Solution(){
   const [items,setItems]=React.useState<any[]>([]); const [sel,setSel]=React.useState<number|undefined>(); const [detail,setDetail]=React.useState<any>(null);
   React.useEffect(()=>{ (async()=>{ const r=await fetch('/api/items'); setItems(await r.json()); })(); },[]);

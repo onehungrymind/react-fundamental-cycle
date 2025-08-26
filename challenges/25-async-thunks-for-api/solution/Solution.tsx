@@ -1,7 +1,6 @@
 /* 25 async-thunks-for-api: Move fetch/POST logic to thunks; manage pending/fulfilled/rejected. */
 import React from 'react';
 
-import React from 'react';
 import { configureStore, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 const fetchItems = createAsyncThunk('items/fetch', async ()=>{ const r=await fetch('/api/items'); return await r.json(); });

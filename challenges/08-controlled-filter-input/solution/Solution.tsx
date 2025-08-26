@@ -1,7 +1,6 @@
 /* 08 controlled-filter-input: Add a search input to filter items by title. */
 import React from 'react';
 
-import React from 'react';
 export default function Solution(){
   const [q,setQ]=React.useState(''); const items=['alpha','bravo','charlie'];
   const filtered = items.filter(s=>s.includes(q.toLowerCase()));

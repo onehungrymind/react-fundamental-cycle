@@ -1,7 +1,6 @@
 /* 23 redux-toolkit-store: Create RTK store for selection/filter; slices and actions. */
 import React from 'react';
 
-import React from 'react';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 const slice = createSlice({ name:'mdv', initialState:{ items:[{id:1,t:'A'}], sel: undefined as number|undefined }, reducers:{ select:(s,a)=>{s.sel=a.payload;} } });

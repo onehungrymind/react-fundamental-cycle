@@ -1,7 +1,6 @@
 /* 21 optimistic-updates: Optimistically add a new item, then reconcile with server. */
 import React from 'react';
 
-import React from 'react';
 export default function Solution(){
   const [items,setItems]=React.useState<any[]>([]); const [title,setTitle]=React.useState('');
   React.useEffect(()=>{ (async()=>{ const r=await fetch('/api/items'); setItems(await r.json()); })(); },[]);

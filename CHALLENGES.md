@@ -1,4 +1,4 @@
-# React Master–Detail: 30 Challenges
+# React Fundamental Cycle Challenges
 
 This document outlines the 30 progressive challenges that evolve a simple master–detail view into a fully reactive, well-architected, tested React application with container–presenter separation, state management, API integration, and testing.
 

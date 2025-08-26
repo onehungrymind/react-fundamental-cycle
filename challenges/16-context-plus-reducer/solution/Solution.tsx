@@ -1,6 +1,4 @@
 /* 16 context-plus-reducer: Combine Context+Reducer for app-wide state without external libs. */
-import React from 'react';
-
 import React,{createContext,useContext,useReducer} from 'react';
 type S={items:{id:number,t:string}[]; sel?:number}; type A={type:'select',id:number};
 const State = createContext<S|null>(null); const Dispatch = createContext<React.Dispatch<A>|null>(null);

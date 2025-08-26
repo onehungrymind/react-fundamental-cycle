@@ -1,7 +1,6 @@
 /* 20 persist-new-item: POST new items to /api/items; refresh list on success. */
 import React from 'react';
 
-import React from 'react';
 export default function Solution(){
   const [items,setItems]=React.useState<any[]>([]); const [title,setTitle]=React.useState('');
   const load=async()=>{ const r=await fetch('/api/items'); setItems(await r.json()); };

@@ -1,6 +1,4 @@
 /* 15 useReducer-for-complex-updates: Adopt useReducer to manage list+detail transitions. */
-import React from 'react';
-
 import React,{useReducer} from 'react';
 type S={items:{id:number,t:string}[]; sel?:number}; type A={type:'select',id:number}|{type:'add',t:string};
 const init:S={items:[{id:1,t:'A'}]}; function r(s:S,a:A):S{ switch(a.type){ case 'select': return {...s,sel:a.id}; case 'add': return {...s,items:[...s.items,{id:Date.now(),t:a.t}]}; } }

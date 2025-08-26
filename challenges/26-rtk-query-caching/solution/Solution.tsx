@@ -1,7 +1,6 @@
 /* 26 rtk-query-caching: Replace thunks with RTK Query for list/detail and cache invalidation. */
 import React from 'react';
 
-import React from 'react';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';

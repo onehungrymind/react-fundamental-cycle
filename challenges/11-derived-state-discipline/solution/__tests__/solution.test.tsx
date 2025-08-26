@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import React from 'react';
+import '@testing-library/jest-dom';
 import Solution from '../Solution';
 
 it('Challenge 11 renders', async () => {

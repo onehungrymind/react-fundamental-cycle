@@ -21,8 +21,8 @@ This repository contains a complete React learning curriculum that evolves from 
 ### Installation & Setup
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd react-mdv-30-challenges-full
+git clone https://github.com/onehungrymind/react-fundamental-cycle.git
+cd react-fundamental-cycle
 
 # Install dependencies
 npm install
