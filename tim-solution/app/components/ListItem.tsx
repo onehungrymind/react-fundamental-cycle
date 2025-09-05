@@ -1,20 +1,10 @@
-// Define a data type for our heroes
-type Item = {
-	id: number;
-	title: string;
-	desc: string;
-};
+"use client";
+import React from 'react';
 
-// and another type for ListItem's props
-type ListItemProps = {
-	item: Item;
-};
-
-// Define a ListItem component
-export default function ListItem({ item }: ListItemProps) {
+export default function ListItem({ title, onSelect } : { title: string; onSelect?: () => void }) {
 	return (
-		<li>
-		{item.title}
-		</li>
+		<button onClick={onSelect}>
+			{title}
+		</button>
 	);
 }
