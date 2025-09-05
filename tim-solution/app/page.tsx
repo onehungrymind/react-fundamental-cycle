@@ -1,4 +1,5 @@
 import React from 'react';
+import ListItem from './components/ListItem';
 
 export default function Home() {
 	const items = [
@@ -11,12 +12,10 @@ export default function Home() {
 
 	return (
 		<div>
-			<h1>Challenge 01 [Tim]</h1>
+			<h1>Challenge 02 [Tim]</h1>
 			<ul>
 				{items.map(item => (
-					<li key={item.id}>
-					{item.title}
-					</li>
+					<ListItem key={item.id} item={item} />
 				))}
 			</ul>
 			<div>
