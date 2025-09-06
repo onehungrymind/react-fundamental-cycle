@@ -1,10 +1,11 @@
 // Challenge 02 - timothy.allen@iem.com
+"use client";
 import React from 'react';
 
 // A presenter component
-function ListItem({ title, desc } : { title: string; desc: string; }) {
+function ListItem({ title, desc , onSelect } : { title: string; desc: string; onSelect?: () => void }) {
 	return (
-		<button>
+		<button onClick={onSelect}>
 			{title}
 		</button>
 	);
@@ -12,7 +13,7 @@ function ListItem({ title, desc } : { title: string; desc: string; }) {
 
 export default function Home() {
 	// Keep data separate from presentation
-	const items = [
+	const heroes = [
 		{ id: 1, title: 'Legolas', desc: 'A Wood Elf', strength: 'Bow' },
 		{ id: 2, title: 'Gimli', desc: 'A Dward', strength: 'Axe' },
 		{ id: 3, title: 'Merry', desc: 'A Hobbit', strength: 'Courage' },
@@ -22,9 +23,9 @@ export default function Home() {
 	// Call the presenter component from here
 	return (
 		<ul>
-			{items.map(item => (
-				<li key={item.id}>
-				<ListItem title={item.title} desc={item.desc} />
+			{heroes.map(hero => (
+				<li key={hero.id}>
+				<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{window.alert(hero.desc)} } />
 				</li>
 			))}
 		</ul>
