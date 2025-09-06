@@ -15,6 +15,7 @@ export default function Home() {
 	// Dynamic list rendering from data array
 	const items = Array.from({ length: 7 }, (_, i) => ({
 		id: i + 1,
+		desc: `Item ${i + 1} is remarkably reliable`,
 		title: `Item ${i + 1}`
 	}));
 	
@@ -36,7 +37,8 @@ export default function Home() {
 			{ selectedItem ? (
 				<div>
 					<h2>{ selectedItem.title }</h2>
-					<p>ID: { selectedItem.id }</p>
+					<p>id: { selectedItem.id }</p>
+					<p>desc: { selectedItem.desc }</p>
 				</div>
 			) : (
 				<h2>Select a item!</h2>
