@@ -19,15 +19,25 @@ export default function Home() {
 		{ id: 3, title: 'Merry', desc: 'A Hobbit', strength: 'Courage' },
 		{ id: 4, title: 'Pippin', desc: 'A SecondHobbit', strength: 'Stomach' }
 	];
+	const active = heroes[0];
 
 	// Call the presenter component from here
+	// this interactivity is temporary, just trying out passing an event handler
 	return (
-		<ul>
-			{heroes.map(hero => (
-				<li key={hero.id}>
-				<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{window.alert(hero.desc)} } />
-				</li>
-			))}
-		</ul>
+		<div>
+			<ul>
+				{heroes.map(hero => (
+					<li key={hero.id}>
+					<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{window.alert("You clicked " + hero.title )} } />
+					</li>
+				))}
+			</ul>
+			<hr/>
+			<div>
+				<h2>{active.title}</h2>
+				<p>{active.desc}</p>
+				<p>{active.strength}</p>
+			</div>
+		</div>
 	);
 }
