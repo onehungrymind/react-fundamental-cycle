@@ -23,20 +23,29 @@ export default function Home() {
 	];
 	
 	// Use state to maintain which ListItem is selected
-	const [activeListItem, setActiveListItem] = useState();
-
+	const [active, setActive] = useState();
+	const selectedHero = heroes.find(i => i.id === active);
 
 	// Call the presenter component from here
 	return (
 		<div>
-		<ul>
-			{heroes.map(hero => (
-				<li key={hero.id}>
-				<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{ setActiveListItem(hero.id) } } />
-				</li>
-			))}
-		</ul>
-		{ <h1> { activeListItem ? heroes[activeListItem].id : "nothing" } </h1> }
+			<ul>
+				{heroes.map(hero => (
+					<li key={hero.id}>
+					<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{ setActive(hero.id) } } />
+					</li>
+				))}
+			</ul>
+			<hr/>
+			{ selectedHero ? (
+				<div>
+					<h2>{ selectedHero.title }</h2>
+					<p>{ selectedHero.desc }</p>
+					<p><em>"You have my { selectedHero.strength }"</em></p>
+				</div>
+			) : (
+				<h2>Select a hero!</h2>
+			)}
 		</div>
 	);
 }
