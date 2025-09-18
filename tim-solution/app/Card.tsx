@@ -1,4 +1,4 @@
-/* Challenge 05 - timothy.allen@iem.com
+/* 
  * Create a reusable `Card` Component
  */
 
@@ -6,13 +6,13 @@
 import React from 'react';
 
 type CardProps = {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function Card({ children }) {
-	return (
-		<div> 
-		{children}
-		</div>
-	);
+  return (
+    <div role="group"> 
+    {children}
+    </div>
+  );
 }
