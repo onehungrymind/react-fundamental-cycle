@@ -1,0 +1,7 @@
+.selectable {
+  color: #999;
+}
+
+.selectable:hover {
+  color: #f00;
+}
