@@ -1,6 +1,8 @@
-// Challenge 02 - timothy.allen@iem.com
+// Challenge 03 - timothy.allen@iem.com
 "use client";
 import React from 'react';
+// We will use state to maintain which item is selected
+import { useState } from 'react';
 
 // A presenter component
 function ListItem({ title, desc , onSelect } : { title: string; desc: string; onSelect?: () => void }) {
@@ -19,25 +21,31 @@ export default function Home() {
 		{ id: 3, title: 'Merry', desc: 'A Hobbit', strength: 'Courage' },
 		{ id: 4, title: 'Pippin', desc: 'A SecondHobbit', strength: 'Stomach' }
 	];
-	const active = heroes[0];
+	
+	// Use state to maintain which ListItem is selected
+	const [active, setActive] = useState();
+	const selectedHero = heroes.find(i => i.id === active);
 
 	// Call the presenter component from here
-	// this interactivity is temporary, just trying out passing an event handler
 	return (
 		<div>
 			<ul>
 				{heroes.map(hero => (
 					<li key={hero.id}>
-					<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{window.alert("You clicked " + hero.title )} } />
+					<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{ setActive(hero.id) } } />
 					</li>
 				))}
 			</ul>
 			<hr/>
-			<div>
-				<h2>{active.title}</h2>
-				<p>{active.desc}</p>
-				<p>{active.strength}</p>
-			</div>
+			{ selectedHero ? (
+				<div>
+					<h2>{ selectedHero.title }</h2>
+					<p>{ selectedHero.desc }</p>
+					<p><em>"You have my { selectedHero.strength }"</em></p>
+				</div>
+			) : (
+				<h2>Select a hero!</h2>
+			)}
 		</div>
 	);
 }
