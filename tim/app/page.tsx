@@ -26,6 +26,7 @@ export default function Home() {
 	// Call the ListItem component with the dynamic list items
 	return (
 		<div>
+			<h1>Challenge 04 [Tim]</h1>
 			<ul>
 				{items.map(item => (
 					<li key={item.id}>
