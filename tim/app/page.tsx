@@ -29,6 +29,7 @@ export default function Home() {
 	// Call the presenter component from here
 	return (
 		<div>
+			<h1>Challenge 03 [Tim]</h1>
 			<ul>
 				{heroes.map(hero => (
 					<li key={hero.id}>
