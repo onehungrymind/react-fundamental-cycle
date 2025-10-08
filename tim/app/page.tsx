@@ -25,6 +25,7 @@ export default function Home() {
 	// this interactivity is temporary, just trying out passing an event handler
 	return (
 		<div>
+			<h1>Challenge 02 [Tim]</h1>
 			<ul>
 				{heroes.map(hero => (
 					<li key={hero.id}>
