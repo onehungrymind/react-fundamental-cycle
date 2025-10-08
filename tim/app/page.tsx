@@ -1,50 +1,47 @@
-// Challenge 03 - timothy.allen@iem.com
+/* Challenge 04 - timothy.allen@iem.com
+ * Convert hardcoded items to a data array
+ * Use `.map()` to render list items dynamically
+ * Add unique `key` props for each list item
+ * Maintain the same visual appearance
+ * Ensure proper React rendering optimization
+ */
+
 "use client";
 import React from 'react';
-// We will use state to maintain which item is selected
 import { useState } from 'react';
-
-// A presenter component
-function ListItem({ title, desc , onSelect } : { title: string; desc: string; onSelect?: () => void }) {
-	return (
-		<button onClick={onSelect}>
-			{title}
-		</button>
-	);
-}
+import ListItem from './ListItem';
 
 export default function Home() {
-	// Keep data separate from presentation
-	const heroes = [
-		{ id: 1, title: 'Legolas', desc: 'A Wood Elf', strength: 'Bow' },
-		{ id: 2, title: 'Gimli', desc: 'A Dward', strength: 'Axe' },
-		{ id: 3, title: 'Merry', desc: 'A Hobbit', strength: 'Courage' },
-		{ id: 4, title: 'Pippin', desc: 'A SecondHobbit', strength: 'Stomach' }
-	];
+	// Dynamic list rendering from data array
+	const items = Array.from({ length: 7 }, (_, i) => ({
+		id: i + 1,
+		desc: `Item ${i + 1} is remarkably reliable`,
+		title: `Item ${i + 1}`
+	}));
 	
 	// Use state to maintain which ListItem is selected
-	const [active, setActive] = useState();
-	const selectedHero = heroes.find(i => i.id === active);
+	const [active, setActive] = useState<number | undefined>();
+	const selectedItem = items.find(i => i.id === active);
 
-	// Call the presenter component from here
+	// Call the ListItem component with the dynamic list items
 	return (
 		<div>
 			<ul>
-				{heroes.map(hero => (
-					<li key={hero.id}>
-					<ListItem title={hero.title} desc={hero.desc} onSelect={ ()=>{ setActive(hero.id) } } />
+				{items.map(item => (
+					<li key={item.id}>
+					<ListItem title={item.title} onSelect={ ()=>{ setActive(item.id) } } />
 					</li>
 				))}
 			</ul>
 			<hr/>
-			{ selectedHero ? (
+			{ selectedItem ? (
 				<div>
-					<h2>{ selectedHero.title }</h2>
-					<p>{ selectedHero.desc }</p>
-					<p><em>"You have my { selectedHero.strength }"</em></p>
+					<h2>{ selectedItem.title }</h2>
+					<p>id: { selectedItem.id }</p>
+					<p>desc: { selectedItem.desc }</p>
 				</div>
 			) : (
-				<h2>Select a hero!</h2>
+				<h2>Select a item!</h2>
 			)}
 		</div>
 	);
