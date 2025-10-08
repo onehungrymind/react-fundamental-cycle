@@ -1,0 +1,26 @@
+/* the outside div, defaulting to two columns */
+.container {
+   display: grid;
+   grid-template-columns: 1fr 2fr;
+   gap: 2rem;
+   padding: 2rem;
+   height: 100vh;
+}
+
+/* detect a tablet or phone and restrict to just one column */
+@media (max-width: 768px) {
+.container {
+   grid-template-columns: 1fr; /* Stack columns on smaller screens */
+  }
+}
+
+/* Let's add some basic styling to the list and card areas */
+.listSection {
+   background-color: #f7f7f7;
+   border-radius: 8px;
+   padding: 1rem;
+}
+
+.cardSection {
+   padding: 1rem;
+}
