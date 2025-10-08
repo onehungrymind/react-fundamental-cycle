@@ -1,15 +1,16 @@
-/* Challenge 04 - timothy.allen@iem.com
- * Convert hardcoded items to a data array
- * Use `.map()` to render list items dynamically
- * Add unique `key` props for each list item
- * Maintain the same visual appearance
- * Ensure proper React rendering optimization
+/* Challenge 05 - timothy.allen@iem.com
+- Create a reusable `Card` component
+- Use children prop to compose content inside the Card
+- Wrap the Detail view with the Card component
+- Maintain consistent styling and layout
+- Demonstrate component composition patterns
  */
 
 "use client";
 import React from 'react';
 import { useState } from 'react';
 import ListItem from './ListItem';
+import Card from './Card';
 
 export default function Home() {
 	// Dynamic list rendering from data array
@@ -33,6 +34,7 @@ export default function Home() {
 					</li>
 				))}
 			</ul>
+			<Card>
 			<hr/>
 			{ selectedItem ? (
 				<div>
@@ -43,6 +45,7 @@ export default function Home() {
 			) : (
 				<h2>Select a item!</h2>
 			)}
+			</Card>
 		</div>
 	);
 }
