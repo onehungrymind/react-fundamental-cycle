@@ -1,9 +1,9 @@
-/* Challenge 06 - timothy.allen@iem.com
- * Add CSS styles to create visual separation
- * Establish a responsive layout structure
- * Style the list and detail sections distinctly
- * Ensure good visual hierarchy
- * Make the interface look polished and professional
+/* Challenge 07 - timothy.allen@iem.com
+ * Add click handlers to list items
+ * Store selected item ID in state using `useState`
+ * Update detail view when an item is selected
+ * Provide visual feedback for selected items
+ * Handle the initial state (no selection)
  */
 
 "use client";
@@ -29,10 +29,10 @@ export default function Home() {
    return (
       <div className={styles.container}>
          <div className={styles.listSection}>
-         <h1>Challenge 06 [Tim]</h1>
+         <h1>Challenge 07 [Tim]</h1>
          <ul>
             {items.map(item => (
-               <li key={item.id}>
+               <li key={item.id} className={item.id === active ? styles.selectedItem : styles.notSelectedItem}>
                <ListItem title={item.title} onSelect={ ()=>{ setActive(item.id) } } />
                </li>
             ))}
