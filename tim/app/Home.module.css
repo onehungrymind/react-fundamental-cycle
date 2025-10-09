@@ -24,3 +24,11 @@
 .cardSection {
    padding: 1rem;
 }
+
+.selectedItem {
+   background-color: #333399;
+}
+
+.notSelectedItem {
+   background-color: #999999;
+}
