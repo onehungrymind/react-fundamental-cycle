@@ -55,7 +55,7 @@ This document provides official documentation and learning resources for each ch
 
 ### Challenge 6: Styling the UI
 **Official Documentation:**
-- [Styling and CSS](https://react.dev/learn/writing-markup-with-jsx#adding-styles)
+- [Styling and CSS](https://nextjs.org/docs/app/getting-started/css#css-modules)
 
 **Community Resources:**
 - [CSS Modules Documentation](https://github.com/css-modules/css-modules)
