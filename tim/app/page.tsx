@@ -1,9 +1,9 @@
-/* Challenge 07 - timothy.allen@iem.com
- * Add click handlers to list items
- * Store selected item ID in state using `useState`
- * Update detail view when an item is selected
- * Provide visual feedback for selected items
- * Handle the initial state (no selection)
+/* Challenge 08 - timothy.allen@iem.com
+ * Add a controlled search input field
+ * Filter items based on search text
+ * Update the list in real-time as user types
+ * Handle empty search results gracefully
+ * Maintain selection state during filtering
  */
 
 "use client";
@@ -15,7 +15,7 @@ import styles from './Home.module.css';
 
 export default function Home() {
    // Dynamic list rendering from data array
-   const items = Array.from({ length: 7 }, (_, i) => ({
+   const items = Array.from({ length: 20 }, (_, i) => ({
       id: i + 1,
       desc: `Item ${i + 1} is remarkably reliable`,
       title: `Item ${i + 1}`
@@ -23,19 +23,32 @@ export default function Home() {
    
    // Use state to maintain which ListItem is selected
    const [active, setActive] = useState<number | undefined>();
+   const [searchTerm, setSearchTerm] =  useState('');
    const selectedItem = items.find(i => i.id === active);
+   const filtered = items.filter(i => i.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
    // Call the ListItem component with the dynamic list items
    return (
       <div className={styles.container}>
-         <div className={styles.listSection}>
-         <h1>Challenge 07 [Tim]</h1>
-         <ul>
-            {items.map(item => (
+         <div>
+         <h1>Challenge 08 [Tim]</h1>
+	 <label>
+	    Search:
+	    <input
+	       name="searchTerm"
+               value={searchTerm}
+               onChange={e => {
+                  setSearchTerm(e.target.value);
+	       }}
+	    />
+	 </label>
+         <ul className={styles.listSection}>
+            { filtered.length > 0 ? 
+	       filtered.map(item => (
                <li key={item.id} className={item.id === active ? styles.selectedItem : styles.notSelectedItem}>
                <ListItem title={item.title} onSelect={ ()=>{ setActive(item.id) } } />
                </li>
-            ))}
+            )) : <li>No results</li>}
          </ul>
          </div>
          <div className={styles.cardSection}>
