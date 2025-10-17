@@ -21,7 +21,7 @@ This repository contains a complete React learning curriculum that evolves from 
 ### Installation & Setup
 ```bash
 # Fork my repository
-From github, `fork` my respository, `https://github.com/TimothyChenAllen/react-fundamental-cycle`
+From github, fork my respository, https://github.com/TimothyChenAllen/react-fundamental-cycle
 
 # Clone YOUR GitHub repository to your local machine:
 git clone https://github.com/YOUR_REPOSITORY/react-fundamental-cycle.git
