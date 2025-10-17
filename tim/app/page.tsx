@@ -1,9 +1,9 @@
-/* Challenge 08 - timothy.allen@iem.com
- * Add a controlled search input field
- * Filter items based on search text
- * Update the list in real-time as user types
- * Handle empty search results gracefully
- * Maintain selection state during filtering
+/* Challenge 09 - timothy.allen@iem.com
+ * Create a controlled form for adding new items
+ * Validate form inputs appropriately
+Add new items to the list on form submission
+Clear form after successful submission
+Handle form submission events properly
  */
 
 "use client";
@@ -31,7 +31,15 @@ export default function Home() {
    return (
       <div className={styles.container}>
          <div>
-         <h1>Challenge 08 [Tim]</h1>
+         <h1>Challenge 09 [Tim]</h1>
+         <label>
+           New Item:
+             <form>
+             Id: <input/>
+             Desc: <input/>
+             </form>
+          </label>
+          <hr/>
 	 <label>
 	    Search:
 	    <input
