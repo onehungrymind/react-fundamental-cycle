@@ -1,4 +1,4 @@
-/* Challenge 09 - timothy.allen@iem.com
+/* Challenge 10 - timothy.allen@iem.com
  * Create a controlled form for adding new items
  * Validate form inputs appropriately
 Add new items to the list on form submission
@@ -31,7 +31,8 @@ export default function Home() {
    return (
       <div className={styles.container}>
          <div>
-         <h1>Challenge 09 [Tim]</h1>
+         <h1>Challenge 10 [Tim]</h1>
+         <h2>DATABASE ACCESS</h2>
          <label>
            New HOBBIT Item:
              <form>
