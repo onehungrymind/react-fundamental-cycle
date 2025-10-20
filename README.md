@@ -20,8 +20,11 @@ This repository contains a complete React learning curriculum that evolves from 
 
 ### Installation & Setup
 ```bash
-# Clone the repository
-git clone https://github.com/onehungrymind/react-fundamental-cycle.git
+# Fork my repository
+From github, fork my respository, https://github.com/TimothyChenAllen/react-fundamental-cycle
+
+# Clone YOUR GitHub repository to your local machine:
+git clone https://github.com/YOUR_REPOSITORY/react-fundamental-cycle.git
 cd react-fundamental-cycle
 
 # Install dependencies
@@ -62,10 +65,11 @@ challenges/
 
 1. **Read the Challenge**: Start with `CHALLENGE.md` in each challenge directory
 2. **Understand Requirements**: Review the objective, requirements, and expected outcomes
-3. **Implement Your Solution**: Create your own implementation based on the requirements
-4. **Test Your Work**: Run `npm run test` to verify your solution passes the tests
-5. **Compare with Solution**: Review the provided `Solution.tsx` to learn from the reference implementation
-6. **Move to Next Challenge**: Each challenge builds upon the previous ones
+3. **Read the Resources**: Review [RESOURCES.md](RESOURCES.md) for web resources
+4. **Implement Your Solution**: Create your own implementation based on the requirements
+5. **Test Your Work**: Run `npm run test` to verify your solution passes the tests
+6. **Compare with Solution**: Review the provided `Solution.tsx` to learn from the reference implementation
+7. **Move to Next Challenge**: Each challenge builds upon the previous ones
 
 ### Development Environment
 
