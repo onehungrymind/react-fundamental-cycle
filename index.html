@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Fundamentals Cycle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --tumblr-blue: #001935;
+      --tumblr-accent: #00b8ff;
+      --tumblr-reblog: #56bc8a;
+      --tumblr-heart: #ec5a5a;
+      --tumblr-note: #a3a3a3;
+      --post-bg: #1a1a2e;
+      --post-border: #2a2a3e;
+      --body-bg: #0f0f1a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #9e9eb8;
+      --text-muted: #6b6b85;
+      --tag-bg: #16213e;
+      --phase-foundation: #7b68ee;
+      --phase-building: #00b8ff;
+      --phase-integration: #56bc8a;
+      --phase-refinement: #ff6b9d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--body-bg);
+      color: var(--text-primary);
+      font-family: 'Karla', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Tumblr-style noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ─── HEADER / BLOG BANNER ─── */
+    .blog-header {
+      background: linear-gradient(135deg, var(--tumblr-blue) 0%, #0a1628 50%, #0d1f3c 100%);
+      border-bottom: 3px solid var(--tumblr-accent);
+      padding: 3rem 1rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; right: -50%; bottom: -50%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(0,184,255,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(123,104,238,0.06) 0%, transparent 50%);
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) rotate(0deg); }
+      to { transform: translate(20px, -10px) rotate(2deg); }
+    }
+
+    .blog-avatar {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 1rem;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 4px 20px rgba(0,184,255,0.3));
+    }
+
+    .blog-avatar svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .blog-title {
+      font-family: 'Courier Prime', monospace;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+      color: white;
+    }
+
+    .blog-title span {
+      color: var(--tumblr-accent);
+    }
+
+    .blog-description {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    .blog-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .blog-stat {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .blog-stat strong {
+      color: var(--tumblr-accent);
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ─── FEED / POST COLUMN ─── */
+    .feed {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* ─── POST CARD ─── */
+    .post {
+      background: var(--post-bg);
+      border: 1px solid var(--post-border);
+      border-radius: 6px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .post:hover {
+      border-color: rgba(0,184,255,0.3);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--post-border);
+    }
+
+    .post-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .post-username {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+    }
+
+    .post-body {
+      padding: 1.2rem 1rem;
+    }
+
+    .post h2 {
+      font-family: 'Courier Prime', monospace;
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .post h3 {
+      font-family: 'Courier Prime', monospace;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin: 1.2rem 0 0.5rem;
+      border-bottom: 1px dashed var(--post-border);
+      padding-bottom: 0.3rem;
+    }
+
+    .post p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      margin-bottom: 0.6rem;
+    }
+
+    .post code {
+      font-family: 'Courier Prime', monospace;
+      background: var(--tag-bg);
+      padding: 0.15em 0.4em;
+      border-radius: 3px;
+      font-size: 0.85em;
+      color: var(--tumblr-accent);
+    }
+
+    .post pre {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0.8rem 0;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #c9d1d9;
+    }
+
+    /* ─── PHASE TABLE ─── */
+    .phase-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.8rem 0;
+      font-size: 0.82rem;
+    }
+
+    .phase-table th {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--post-border);
+    }
+
+    .phase-table td {
+      padding: 0.45rem 0.6rem;
+      border-bottom: 1px solid rgba(42,42,62,0.5);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+
+    .phase-table td:first-child {
+      font-family: 'Courier Prime', monospace;
+      color: var(--text-muted);
+      width: 2rem;
+    }
+
+    .phase-table td:nth-child(2) {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .phase-table tr:hover td {
+      background: rgba(0,184,255,0.03);
+    }
+
+    /* ─── PHASE INDICATORS ─── */
+    .phase-label {
+      display: inline-block;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+    }
+
+    .phase-foundation .phase-label { background: rgba(123,104,238,0.15); color: var(--phase-foundation); border: 1px solid rgba(123,104,238,0.3); }
+    .phase-building .phase-label { background: rgba(0,184,255,0.1); color: var(--phase-building); border: 1px solid rgba(0,184,255,0.25); }
+    .phase-integration .phase-label { background: rgba(86,188,138,0.1); color: var(--phase-integration); border: 1px solid rgba(86,188,138,0.25); }
+    .phase-refinement .phase-label { background: rgba(255,107,157,0.1); color: var(--phase-refinement); border: 1px solid rgba(255,107,157,0.25); }
+
+    .phase-result {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.6rem;
+      padding-left: 0.8rem;
+      border-left: 2px solid var(--post-border);
+    }
+
+    /* ─── TAGS ─── */
+    .post-tags {
+      padding: 0.6rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      transition: color 0.15s;
+      cursor: default;
+    }
+
+    .tag:hover { color: var(--tumblr-accent); }
+
+    /* ─── POST FOOTER / NOTES BAR ─── */
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      border-top: 1px solid var(--post-border);
+    }
+
+    .post-notes {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .post-action {
+      font-size: 1rem;
+      color: var(--text-muted);
+      cursor: default;
+      transition: color 0.15s, transform 0.15s;
+      display: flex;
+      align-items: center;
+    }
+
+    .post-action:hover { transform: scale(1.15); }
+    .post-action.heart:hover { color: var(--tumblr-heart); }
+    .post-action.reblog:hover { color: var(--tumblr-reblog); }
+    .post-action.share:hover { color: var(--tumblr-accent); }
+
+    /* ─── TIPS LIST ─── */
+    .tips-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tips-list li {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding: 0.35rem 0 0.35rem 1.4rem;
+      position: relative;
+    }
+
+    .tips-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0.2rem;
+      color: var(--tumblr-accent);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* ─── STRUCTURE DIAGRAM ─── */
+    .structure {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.78rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .structure .folder { color: var(--tumblr-accent); }
+    .structure .file { color: var(--text-secondary); }
+    .structure .comment { color: var(--text-muted); font-style: italic; }
+
+    /* ─── STACK BADGES ─── */
+    .stack-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.8rem 0;
+    }
+
+    .badge {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 3px;
+      background: var(--tag-bg);
+      border: 1px solid var(--post-border);
+      color: var(--text-secondary);
+      letter-spacing: 0.3px;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .post {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .post:nth-child(1) { animation-delay: 0.1s; }
+    .post:nth-child(2) { animation-delay: 0.2s; }
+    .post:nth-child(3) { animation-delay: 0.3s; }
+    .post:nth-child(4) { animation-delay: 0.4s; }
+    .post:nth-child(5) { animation-delay: 0.5s; }
+    .post:nth-child(6) { animation-delay: 0.6s; }
+    .post:nth-child(7) { animation-delay: 0.7s; }
+    .post:nth-child(8) { animation-delay: 0.8s; }
+    .post:nth-child(9) { animation-delay: 0.9s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 660px) {
+      .feed { padding: 1rem 0.5rem 3rem; }
+      .blog-title { font-size: 1.6rem; }
+      .blog-stats { gap: 1.2rem; }
+      .phase-table { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BLOG HEADER -->
+  <header class="blog-header">
+    <div class="blog-avatar"><svg width="569" height="512" viewBox="0 0 569 512" xmlns="http://www.w3.org/2000/svg"><g fill="#FFFFFF" fill-rule="nonzero"><path d="M285.5,201 C255.400481,201 231,225.400481 231,255.5 C231,285.599519 255.400481,310 285.5,310 C315.599519,310 340,285.599519 340,255.5 C340,225.400481 315.599519,201 285.5,201"/><path d="M568.959856,255.99437 C568.959856,213.207656 529.337802,175.68144 466.251623,150.985214 C467.094645,145.423543 467.85738,139.922107 468.399323,134.521063 C474.621631,73.0415145 459.808523,28.6686204 426.709856,9.5541429 C389.677085,-11.8291748 337.36955,3.69129898 284.479928,46.0162134 C231.590306,3.69129898 179.282771,-11.8291748 142.25,9.5541429 C109.151333,28.6686204 94.3382249,73.0415145 100.560533,134.521063 C101.102476,139.922107 101.845139,145.443621 102.708233,151.02537 C97.4493791,153.033193 92.2908847,155.161486 87.3331099,157.39017 C31.0111824,182.708821 0,217.765415 0,255.99437 C0,298.781084 39.6220545,336.307301 102.708233,361.003527 C101.845139,366.565197 101.102476,372.066633 100.560533,377.467678 C94.3382249,438.947226 109.151333,483.32012 142.25,502.434597 C153.629683,508.887578 166.52439,512.186771 179.603923,511.991836 C210.956328,511.991836 247.567589,495.487529 284.479928,465.972527 C321.372196,495.487529 358.003528,511.991836 389.396077,511.991836 C402.475265,512.183856 415.36922,508.884856 426.75,502.434597 C459.848667,483.32012 474.661775,438.947226 468.439467,377.467678 C467.897524,372.066633 467.134789,366.565197 466.291767,361.003527 C529.377946,336.347457 569,298.761006 569,255.99437 M389.155214,27.1025182 C397.565154,26.899606 405.877839,28.9368502 413.241569,33.0055186 C436.223966,46.2772304 446.540955,82.2775015 441.522965,131.770345 C441.181741,135.143488 440.780302,138.556788 440.298575,141.990165 C414.066922,134.08804 387.205771,128.452154 360.010724,125.144528 C343.525021,103.224055 325.192524,82.7564475 305.214266,63.9661533 C336.586743,39.7116483 366.032313,27.1025182 389.135142,27.1025182 M378.356498,310.205598 C368.204912,327.830733 357.150626,344.919965 345.237759,361.405091 C325.045049,363.479997 304.758818,364.51205 284.459856,364.497299 C264.167589,364.51136 243.888075,363.479308 223.702025,361.405091 C211.820914,344.919381 200.80007,327.83006 190.683646,310.205598 C180.532593,292.629285 171.306974,274.534187 163.044553,255.99437 C171.306974,237.454554 180.532593,219.359455 190.683646,201.783142 C200.784121,184.229367 211.770999,167.201087 223.601665,150.764353 C243.824636,148.63809 264.145559,147.579168 284.479928,147.591877 C304.772146,147.579725 325.051559,148.611772 345.237759,150.68404 C357.109048,167.14607 368.136094,184.201112 378.27621,201.783142 C388.419418,219.363718 397.644825,237.458403 405.915303,255.99437 C397.644825,274.530337 388.419418,292.625022 378.27621,310.205598 M419.724813,290.127366 C426.09516,307.503536 431.324985,325.277083 435.380944,343.334682 C417.779633,348.823635 399.836793,353.149774 381.668372,356.285142 C388.573127,345.871232 395.263781,335.035679 401.740334,323.778483 C408.143291,312.655143 414.144807,301.431411 419.805101,290.207679 M246.363271,390.377981 C258.848032,391.140954 271.593728,391.582675 284.5,391.582675 C297.406272,391.582675 310.232256,391.140954 322.737089,390.377981 C310.880643,404.583418 298.10766,417.997563 284.5,430.534446 C270.921643,417.999548 258.18192,404.585125 246.363271,390.377981 Z M187.311556,356.244986 C169.137286,353.123646 151.187726,348.810918 133.578912,343.334682 C137.618549,325.305649 142.828222,307.559058 149.174827,290.207679 C154.754833,301.431411 160.736278,312.655143 167.239594,323.778483 C173.74291,334.901824 180.467017,345.864539 187.311556,356.285142 M149.174827,221.760984 C142.850954,204.473938 137.654787,186.794745 133.619056,168.834762 C151.18418,163.352378 169.085653,159.013101 187.211197,155.844146 C180.346585,166.224592 173.622478,176.986525 167.139234,188.210257 C160.65599,199.433989 154.734761,210.517173 149.074467,221.760984 M322.616657,121.590681 C310.131896,120.827708 297.3862,120.385987 284.379568,120.385987 C271.479987,120.385987 258.767744,120.787552 246.242839,121.590681 C258.061488,107.383537 270.801211,93.9691137 284.379568,81.4342157 C297.99241,93.9658277 310.765727,107.380324 322.616657,121.590681 Z M401.70019,188.210257 C395.196875,176.939676 388.472767,166.09743 381.527868,155.68352 C399.744224,158.819049 417.734224,163.151949 435.380944,168.654058 C431.331963,186.680673 426.122466,204.426664 419.785029,221.781062 C414.205023,210.55733 408.203506,199.333598 401.720262,188.230335 M127.517179,131.790423 C122.438973,82.3176579 132.816178,46.2973086 155.778503,33.0255968 C163.144699,28.9632474 171.455651,26.9264282 179.864858,27.1225964 C202.967687,27.1225964 232.413257,39.7317265 263.785734,63.9862316 C243.794133,82.7898734 225.448298,103.270812 208.949132,125.204763 C181.761691,128.528025 154.90355,134.14313 128.661281,141.990165 C128.199626,138.556788 127.778115,135.163566 127.456963,131.790423 M98.4529773,182.106474 C101.54406,180.767925 104.695358,179.429376 107.906872,178.090828 C114.220532,204.735668 122.781793,230.7969 133.498624,255.99437 C122.761529,281.241316 114.193296,307.357063 107.8868,334.058539 C56.7434387,313.076786 27.0971497,284.003505 27.0971497,255.99437 C27.0971497,229.450947 53.1907013,202.526037 98.4529773,182.106474 Z M155.778503,478.963143 C132.816178,465.691432 122.438973,429.671082 127.517179,380.198317 C127.838331,376.825174 128.259842,373.431953 128.721497,369.978497 C154.953686,377.878517 181.814655,383.514365 209.009348,386.824134 C225.500295,408.752719 243.832321,429.233234 263.805806,448.042665 C220.069,481.834331 180.105722,492.97775 155.838719,478.963143 M441.502893,380.198317 C446.520883,429.691161 436.203894,465.691432 413.221497,478.963143 C388.974566,493.017906 348.991216,481.834331 305.274481,448.042665 C325.241364,429.232737 343.566681,408.752215 360.050868,386.824134 C387.245915,383.516508 414.107066,377.880622 440.338719,369.978497 C440.820446,373.431953 441.221885,376.825174 441.563109,380.198317 M461.193488,334.018382 C454.869166,307.332523 446.294494,281.231049 435.561592,255.99437 C446.289797,230.744081 454.857778,204.629101 461.173416,177.930202 C512.216417,198.911955 541.942994,227.985236 541.942994,255.99437 C541.942994,284.003505 512.296705,313.076786 461.153344,334.058539"/></g></svg></div>
+    <h1 class="blog-title">React Fundamentals <span>Cycle</span></h1>
+    <p class="blog-description">26 challenges. One app. Zero to production-ready React — built progressively with TypeScript, one concept per day.</p>
+    <div class="blog-stats">
+      <div class="blog-stat"><strong>26</strong>challenges</div>
+      <div class="blog-stat"><strong>4</strong>phases</div>
+      <div class="blog-stat"><strong>1</strong>capstone app</div>
+    </div>
+  </header>
+
+  <!-- FEED -->
+  <main class="feed">
+
+    <!-- POST: What You'll Build -->
+    <article class="post">
+      <div class="post-header">
+        <div class="post-avatar" style="background: linear-gradient(135deg, var(--tumblr-accent), #0066cc);">⚛</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <h2>What You'll Build</h2>
+        <p><strong>TaskFlow</strong> — a project management app with projects, tasks, team members, filtering, routing, real-time updates, and a dashboard. Each challenge adds one concept, so by the end you've built a non-trivial app while learning React fundamentals in context.</p>
+        <div class="stack-badges">
+          <span class="badge">React 19</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Vite</span>
+          <span class="badge">React Router v7</span>
+          <span class="badge">TanStack Query v5</span>
+          <span class="badge">Zustand</span>
+          <span class="badge">Redux Toolkit</span>
+          <span class="badge">Vitest</span>
+          <span class="badge">React Testing Library</span>
+          <span class="badge">MSW</span>
+        </div>
+      </div>
+      <div class="post-tags">
+        <span class="tag">#react</span>
+        <span class="tag">#typescript</span>
+        <span class="tag">#workshop</span>
+        <span class="tag">#taskflow</span>
+        <span class="tag">#learn-by-building</span>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">2,847 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: How It Works -->
+    <article class="post">
+      <div class="post-header">
+        <div class="post-avatar" style="background: linear-gradient(135deg, var(--phase-foundation), #4834d4);">⚛</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <h2>How It Works</h2>
+        <p>Each challenge lives in its own directory with everything you need:</p>
+        <pre>challenges/NN-challenge-name/
+  README.md        ← the challenge brief
+  SOLUTION.md      ← reference solution + debrief
+  start/           ← a working app (your starting point)
+  solution/        ← the completed implementation</pre>
+        <p><code>start/</code> is always a running app — <code>npm install && npm run dev</code> works immediately. It's just missing the one feature the challenge asks you to build.</p>
+        <p>Each challenge's <code>start/</code> is derived from the previous challenge's <code>solution/</code>, so the app grows progressively. Complete all 26 and you've built the full capstone.</p>
+
+        <h3>Quick Start</h3>
+        <pre>cd challenges/01-project-setup/start
+npm install
+npm run dev</pre>
+      </div>
+      <div class="post-tags">
+        <span class="tag">#getting-started</span>
+        <span class="tag">#progressive</span>
+        <span class="tag">#self-contained</span>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">1,204 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Phase 1 -->
+    <article class="post phase-foundation">
+      <div class="post-header">
+        <div class="post-avatar" style="background: var(--phase-foundation);">1</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <span class="phase-label">Phase 1 · Foundation</span>
+        <h2>Core mental models — components, props, state, and forms</h2>
+        <table class="phase-table">
+          <thead><tr><th>#</th><th>Challenge</th><th>What You'll Learn</th></tr></thead>
+          <tbody>
+            <tr><td>01</td><td>Project Setup</td><td>Vite, TypeScript strict mode, project structure</td></tr>
+            <tr><td>02</td><td>JSX & Components</td><td>Functional components, composition, semantic HTML</td></tr>
+            <tr><td>03</td><td>Props & TypeScript</td><td>Typed props, interfaces, data flow</td></tr>
+            <tr><td>04</td><td>Lists & Conditionals</td><td>.map(), keys, conditional rendering, empty states</td></tr>
+            <tr><td>05</td><td>State with useState</td><td>Interactive UI, derived state, filtering</td></tr>
+            <tr><td>06</td><td>Events & Forms</td><td>Controlled inputs, validation, form submission</td></tr>
+          </tbody>
+        </table>
+        <p class="phase-result">→ A static app with local state, forms, and filtering.</p>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">986 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Phase 2 -->
+    <article class="post phase-building">
+      <div class="post-header">
+        <div class="post-avatar" style="background: var(--phase-building);">2</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <span class="phase-label">Phase 2 · Building</span>
+        <h2>Primary patterns for structuring a real application</h2>
+        <table class="phase-table">
+          <thead><tr><th>#</th><th>Challenge</th><th>What You'll Learn</th></tr></thead>
+          <tbody>
+            <tr><td>07</td><td>Composition & Children</td><td>Card, Modal, PageLayout — reusable containers</td></tr>
+            <tr><td>08</td><td>Side Effects</td><td>useEffect, cleanup, document title, keyboard shortcuts</td></tr>
+            <tr><td>09</td><td>Custom Hooks</td><td>Extracting reusable stateful logic</td></tr>
+            <tr><td>10</td><td>Client-Side Routing</td><td>React Router, pages, URL params, navigation</td></tr>
+            <tr><td>11</td><td>Master-Detail Pattern</td><td>Side-by-side layout, nested routes, URL-driven selection</td></tr>
+            <tr><td>12</td><td>Context API</td><td>Theme and auth contexts, avoiding prop drilling</td></tr>
+            <tr><td>13</td><td>useReducer</td><td>Complex state, discriminated unions, status workflows</td></tr>
+            <tr><td>14</td><td>Data Fetching</td><td>fetch + useEffect, loading/error states, MSW mock API</td></tr>
+            <tr><td>15</td><td>TanStack Query</td><td>Caching, query keys, stale time, background refetching</td></tr>
+          </tbody>
+        </table>
+        <p class="phase-result">→ A routed app with master-detail layout, custom hooks, and API data.</p>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">1,432 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Phase 3 -->
+    <article class="post phase-integration">
+      <div class="post-header">
+        <div class="post-avatar" style="background: var(--phase-integration);">3</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <span class="phase-label">Phase 3 · Integration</span>
+        <h2>Connecting systems together</h2>
+        <table class="phase-table">
+          <thead><tr><th>#</th><th>Challenge</th><th>What You'll Learn</th></tr></thead>
+          <tbody>
+            <tr><td>16</td><td>Mutations & Optimistic Updates</td><td>useMutation, optimistic UI, rollback, undo</td></tr>
+            <tr><td>17</td><td>Zustand</td><td>Client state store, selectors, filter persistence</td></tr>
+            <tr><td>18</td><td>Redux Toolkit</td><td>Slices, typed hooks, Immer, DevTools</td></tr>
+            <tr><td>19</td><td>Performance</td><td>React.memo, useMemo, useCallback, profiling</td></tr>
+            <tr><td>20</td><td>Error Boundaries</td><td>Isolation zones, fallback UI, error recovery</td></tr>
+            <tr><td>21</td><td>Unit Testing</td><td>Vitest, React Testing Library, userEvent</td></tr>
+            <tr><td>22</td><td>Async Testing</td><td>MSW in tests, loading/error states, mutation testing</td></tr>
+          </tbody>
+        </table>
+        <p class="phase-result">→ Full CRUD, state management, error handling, and a test suite.</p>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">1,118 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Phase 4 -->
+    <article class="post phase-refinement">
+      <div class="post-header">
+        <div class="post-avatar" style="background: var(--phase-refinement);">4</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <span class="phase-label">Phase 4 · Refinement</span>
+        <h2>Production concerns and the capstone</h2>
+        <table class="phase-table">
+          <thead><tr><th>#</th><th>Challenge</th><th>What You'll Learn</th></tr></thead>
+          <tbody>
+            <tr><td>23</td><td>Suspense & Lazy Loading</td><td>Code splitting, React.lazy, skeleton loaders</td></tr>
+            <tr><td>24</td><td>Accessibility</td><td>Focus traps, ARIA, keyboard navigation, contrast</td></tr>
+            <tr><td>25</td><td>Deployment</td><td>Env variables, build optimization, static hosting</td></tr>
+            <tr><td>26</td><td>Capstone</td><td>Team assignment, dashboard, polling — the final app</td></tr>
+          </tbody>
+        </table>
+        <p class="phase-result">→ A code-split, accessible, deployed, complete TaskFlow application.</p>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">764 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Project Structure -->
+    <article class="post">
+      <div class="post-header">
+        <div class="post-avatar" style="background: linear-gradient(135deg, #2d3436, #636e72);">📁</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <h2>Project Structure</h2>
+        <div class="structure">
+          <span class="folder">react-fundamentals-cycle/</span><br>
+          ├── <span class="file">README.md</span> <span class="comment"># This file</span><br>
+          ├── <span class="file">PROGRESS.md</span> <span class="comment"># Track your progress</span><br>
+          ├── <span class="folder">challenges/</span><br>
+          │&nbsp;&nbsp; ├── <span class="folder">01-project-setup/</span><br>
+          │&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">README.md</span> <span class="comment"># Challenge instructions</span><br>
+          │&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="file">SOLUTION.md</span> <span class="comment"># Reference solution + debrief</span><br>
+          │&nbsp;&nbsp; │&nbsp;&nbsp; ├── <span class="folder">start/</span> <span class="comment"># Your starting point</span><br>
+          │&nbsp;&nbsp; │&nbsp;&nbsp; └── <span class="folder">solution/</span> <span class="comment"># Reference implementation</span><br>
+          │&nbsp;&nbsp; ├── <span class="folder">02-jsx-components/</span><br>
+          │&nbsp;&nbsp; │&nbsp;&nbsp; └── ...<br>
+          │&nbsp;&nbsp; └── <span class="folder">26-capstone/</span><br>
+          │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; └── ...<br>
+          └── <span class="folder">shared/</span> <span class="comment"># Shared assets</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">types/</span> <span class="comment"># TypeScript interfaces</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="folder">mock-api/</span> <span class="comment"># MSW handlers and seed data</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="folder">styles/</span> <span class="comment"># Base CSS</span>
+        </div>
+      </div>
+      <div class="post-tags">
+        <span class="tag">#project-structure</span>
+        <span class="tag">#monorepo</span>
+        <span class="tag">#organized</span>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">412 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Tips -->
+    <article class="post">
+      <div class="post-header">
+        <div class="post-avatar" style="background: linear-gradient(135deg, var(--tumblr-heart), #c0392b);">💡</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <h2>Tips</h2>
+        <ul class="tips-list">
+          <li><strong>Don't skip the README.</strong> The concept explanation and gotchas save you debugging time.</li>
+          <li><strong>Run the start app first.</strong> Understand what exists before you start coding.</li>
+          <li><strong>Check acceptance criteria before the solution.</strong> They tell you exactly what "done" means.</li>
+          <li><strong>Read SOLUTION.md even if you solved it.</strong> The debrief covers edge cases and alternatives.</li>
+          <li><strong>Use the TODO comments.</strong> Every <code>start/</code> has comments marking where to add code.</li>
+          <li><strong>Each challenge is independent.</strong> Stuck? Start the next one fresh from its <code>start/</code> directory.</li>
+        </ul>
+      </div>
+      <div class="post-tags">
+        <span class="tag">#tips</span>
+        <span class="tag">#pro-tips</span>
+        <span class="tag">#workflow</span>
+        <span class="tag">#don't-skip-the-readme</span>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">2,103 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- POST: Running Tests -->
+    <article class="post">
+      <div class="post-header">
+        <div class="post-avatar" style="background: linear-gradient(135deg, var(--phase-integration), #1abc9c);">✓</div>
+        <span class="post-username">react-fundamentals-cycle</span>
+      </div>
+      <div class="post-body">
+        <h2>Running Tests</h2>
+        <p>Starting from Challenge 21, solution directories include test suites:</p>
+        <pre>cd challenges/21-unit-testing/solution
+npm install
+npm run test</pre>
+        <p>Tests use <strong>Vitest</strong> + <strong>React Testing Library</strong> + <strong>MSW</strong> for mocking API calls. The testing philosophy: test what the user sees and does, not implementation details.</p>
+      </div>
+      <div class="post-tags">
+        <span class="tag">#testing</span>
+        <span class="tag">#vitest</span>
+        <span class="tag">#rtl</span>
+        <span class="tag">#msw</span>
+      </div>
+      <div class="post-footer">
+        <span class="post-notes">587 notes</span>
+        <div class="post-actions">
+          <span class="post-action share">↗</span>
+          <span class="post-action reblog">🔁</span>
+          <span class="post-action heart">♡</span>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+</body>
+</html>

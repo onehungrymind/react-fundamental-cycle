@@ -1,0 +1,91 @@
+/* ============================================================
+   Design Tokens — Light mode (default)
+   ============================================================ */
+
+:root {
+  --color-bg: #ffffff;
+  --color-heading: #111827;
+  --color-text: #374151;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-surface: #f9fafb;
+  --color-surface-hover: #f3f4f6;
+
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 56px;
+  --header-height: 60px;
+  --footer-height: 48px;
+}
+
+/* ============================================================
+   Design Tokens — Dark mode
+   ============================================================ */
+
+[data-theme="dark"] {
+  --color-bg: #111827;
+  --color-heading: #f9fafb;
+  --color-text: #d1d5db;
+  --color-text-muted: #9ca3af;
+  --color-border: #1f2937;
+  --color-accent: #818cf8;
+  --color-accent-hover: #a5b4fc;
+  --color-surface: #1f2937;
+  --color-surface-hover: #374151;
+}
+
+/* ============================================================
+   Base Reset & Typography
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.25;
+  color: var(--color-heading);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  isolation: isolate;
+}

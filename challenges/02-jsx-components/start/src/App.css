@@ -1,0 +1,134 @@
+/* ============================================================
+   App Layout
+   ============================================================
+   Currently everything is stacked as a column.
+   TODO: replace this with a CSS Grid layout once you extract
+   the four components.  Target grid:
+
+     grid-template-areas:
+       "header  header"
+       "sidebar main"
+       "footer  footer";
+
+   grid-template-columns: var(--sidebar-width) 1fr;
+   grid-template-rows: var(--header-height) 1fr var(--footer-height);
+   ============================================================ */
+
+.app-grid {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: var(--header-height);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-heading);
+}
+
+.header-nav-placeholder {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   Sidebar
+   ============================================================ */
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  padding: 1rem 0;
+  border-right: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.sidebar-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 0 0.75rem;
+}
+
+.sidebar-nav-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-nav-link:hover {
+  background-color: var(--color-surface-hover);
+  text-decoration: none;
+}
+
+.sidebar-nav-link--active {
+  background-color: var(--color-surface-hover);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Main
+   ============================================================ */
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.main-inner {
+  padding: 2.5rem 2rem;
+}
+
+.main-heading {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.main-description {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--footer-height);
+  border-top: 1px solid var(--color-border);
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
