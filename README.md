@@ -34,13 +34,13 @@ challenges/NN-challenge-name/
 
 ### Start Your First Challenge
 
+Open `challenges/01-project-setup/README.md` and follow the instructions. When you're ready to run the app:
+
 ```bash
 cd challenges/01-project-setup/start
 npm install
 npm run dev
 ```
-
-Open the `README.md` in that challenge directory and follow the instructions.
 
 ### Working Through a Challenge
 
