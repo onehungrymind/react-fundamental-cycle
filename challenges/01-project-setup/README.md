@@ -14,7 +14,7 @@ Every React project begins with tooling decisions. The ecosystem has evolved sig
 
 ## Starting Snapshot
 
-An empty directory. You will scaffold the project from scratch.
+The `start/` directory contains a pre-scaffolded Vite + React + TypeScript project so you can `npm install && npm run dev` immediately. The steps below describe how that project was created — follow along to understand each decision, or try it yourself in a scratch directory.
 
 ## The Challenge
 
@@ -23,11 +23,11 @@ An empty directory. You will scaffold the project from scratch.
 Use Vite to create a new React + TypeScript project:
 
 ```bash
-npm create vite@latest . -- --template react-ts
+npm create vite@latest .
 npm install
 ```
 
-> When prompted, select the **React + TypeScript** variant. The `--template react-ts` flag does this automatically.
+> When prompted, select **React** and then **TypeScript**.
 
 ### Step 2 — Verify TypeScript Strict Mode
 
@@ -94,7 +94,7 @@ Make a small edit to `App.tsx` while `npm run dev` is running and confirm the br
 
 ## Critical Gotchas
 
-**Select the right variant.** When running `npm create vite@latest` interactively, you must choose "React" then "TypeScript" (not "TypeScript + SWC" if you want standard Babel). The `--template react-ts` flag bypasses this prompt.
+**Select the right variant.** When running `npm create vite@latest` interactively, you must choose "React" then "TypeScript" (not "TypeScript + SWC" if you want standard Babel).
 
 **Keep `tsconfig.node.json`.** Vite generates two tsconfig files: `tsconfig.app.json` for your source code and `tsconfig.node.json` for the Vite config file itself. Do not delete `tsconfig.node.json` — it is required for `vite.config.ts` to type-check correctly.
 
